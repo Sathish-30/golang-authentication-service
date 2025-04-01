@@ -8,35 +8,34 @@ import (
 )
 
 type Server struct {
-	port   string
-	router *http.ServeMux
+	port    string
+	handler http.Handler
 }
 
 func (s *Server) SetPort(port int) {
 	s.port = fmt.Sprintf(":%d", port)
 }
 
-func (s *Server) SetRouter(router *http.ServeMux) {
-	s.router = router
-}
-
 func (s *Server) GetPort() string {
 	return s.port
 }
 
-func (s *Server) GetRouter() *http.ServeMux {
-	return s.router
+func (s *Server) SetHandler(handler http.Handler) {
+	s.handler = handler
+}
+func (s *Server) GetHandler() http.Handler {
+	return s.handler
 }
 
-func NewServer(port int, router *http.ServeMux) *Server {
+func NewServer(port int, handler http.Handler) *Server {
 	return &Server{
-		port:   fmt.Sprintf(":%d", port),
-		router: router,
+		port:    fmt.Sprintf(":%d", port),
+		handler: handler,
 	}
 }
 
 func (s *Server) Start() {
-	if err := http.ListenAndServe(s.port, s.router); err != nil {
+	if err := http.ListenAndServe(s.port, s.handler); err != nil {
 		log.Logger.Fatal("Failed to start server: " + err.Error())
 	}
 }

@@ -16,6 +16,12 @@ func GetRouter() *http.ServeMux {
 	return router
 }
 
-func RegisterHomeRoute() {
+func RegisterRoutes() {
+	registerUserRoute()
+	registerAdminRoute()
+	registerHomeRoute()
+}
+
+func registerHomeRoute() {
 	router.HandleFunc("GET /", handler.HomeHandler)
 }
